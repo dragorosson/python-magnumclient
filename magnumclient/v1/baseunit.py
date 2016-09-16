@@ -40,6 +40,9 @@ class BaseTemplateManager(base.Manager):
         return '/v1/' + cls.template_name + \
                '/%s' % id if id else '/v1/' + cls.template_name
 
+    def _action_path(cls, id, action):
+        return cls._path(id) + '/actions/%s' % action
+
     def list(self, limit=None, marker=None, sort_key=None,
              sort_dir=None, detail=False):
         """Retrieve a list of bays.
@@ -106,3 +109,6 @@ class BaseTemplateManager(base.Manager):
 
     def update(self, id, patch):
         return self._update(self._path(id), patch)
+
+    def restart(self, id):
+        return self._action(self._action_path(id, 'restart'))

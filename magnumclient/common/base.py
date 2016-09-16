@@ -135,6 +135,9 @@ class Manager(object):
     def _delete(self, url):
         self.api.raw_request('DELETE', url)
 
+    def _action(self, url):
+        self.api.raw_request('PATCH', url)
+
 
 class Resource(base.Resource):
     """Represents a particular instance of an object (tenant, user, etc).

@@ -96,6 +96,13 @@ fake_responses = {
             UPDATED_CLUSTER,
         ),
     },
+    '/v1/clusters/%s/actions/restart' % CLUSTER1['name']:
+    {
+        'PATCH': (
+            {},
+            None,
+        ),
+    },
     '/v1/clusters/?limit=2':
     {
         'GET': (
@@ -302,3 +309,12 @@ class ClusterManagerTest(testtools.TestCase):
         ]
         self.assertEqual(expect, self.api.calls)
         self.assertEqual(NEW_NAME, cluster.name)
+
+    def test_cluster_restart(self):
+        cluster = self.mgr.restart(CLUSTER1['name'])
+        expect = [
+            ('PATCH', '/v1/clusters/%s/actions/restart' % CLUSTER1['name'],
+             {}, None),
+        ]
+        self.assertEqual(expect, self.api.calls)
+        self.assertIsNone(cluster)

@@ -332,3 +332,18 @@ def _generate_csr_and_key():
     }
 
     return result
+
+
+@utils.arg('cluster',
+           metavar='<cluster>',
+           nargs='+',
+           help='ID or name of the (cluster)s to restart.')
+def do_cluster_restart(cs, args):
+    """Restart specified cluster."""
+    for id in args.cluster:
+        try:
+            cs.clusters.restart(id)
+            print("Request to restart cluster %s has been accepted." % id)
+        except Exception as e:
+            print("Restart for cluster %(cluster)s failed: %(e)s" %
+                  {'cluster': id, 'e': e})

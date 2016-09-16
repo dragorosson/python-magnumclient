@@ -296,3 +296,19 @@ class ShellTest(shell_test_base.TestCommandLineArgument):
         self._test_arg_failure('cluster-config xxx yyy',
                                self._unrecognized_arg_error)
         self.assertFalse(mock_cluster.called)
+
+    @mock.patch('magnumclient.v1.clusters.ClusterManager.restart')
+    def test_cluster_restart(self, mock_restart):
+        self._test_arg_success('cluster-restart xxx')
+        self.assertTrue(mock_restart.called)
+
+    @mock.patch('magnumclient.v1.clusters.ClusterManager.restart')
+    def test_cluster_restart_multiple_id_success(self, mock_restart):
+        self._test_arg_success('cluster-restart xxx yyy')
+        self.assertTrue(mock_restart.called)
+        self.assertEqual(2, mock_restart.call_count)
+
+    @mock.patch('magnumclient.v1.clusters.ClusterManager.restart')
+    def test_cluster_restart_no_arg(self, mock_restart):
+        self._test_arg_failure('cluster-restart', self._few_argument_error)
+        self.assertFalse(mock_restart.called)
